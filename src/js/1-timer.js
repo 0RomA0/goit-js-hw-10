@@ -52,20 +52,24 @@ const options = {
 function clickBtn() {
     if (!userSelectedDate) {
         return;
-    }
-        btn.disabled = true; 
-        const interval = setInterval(() => {
+  }
+  // clearInterval(intervalId);
+  btn.disabled = true; 
+  input.disabled = true;
+        intervalId = setInterval(() => {
         const now = new Date();
         const timeLeft = userSelectedDate - now;
 
-            if (timeLeft <= 0) {
+          if (timeLeft <= 0) {
+      input.disabled = false;
+      btn.disabled = false;
       clearInterval(intervalId);  // Зупинити таймер
+      intervalId = null;      
       updateTimer(0, 0, 0, 0);  // Оновити інтерфейс на 00:00:00:00
     } else {
       const { days, hours, minutes, seconds } = convertMs(timeLeft);
       updateTimer(days, hours, minutes, seconds);
             }
-            
         }, 1000);
     
     
@@ -104,10 +108,5 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-
 
 flatpickr("#datetime-picker", options);
